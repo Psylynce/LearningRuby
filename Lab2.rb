@@ -67,7 +67,7 @@ def rps_game_winner(game)
 end
 
 def rps_tournament_winner(game)
-	if !game[0][1].is_a?(String)
+	if !game[0][0].is_a?(String)
 		return rps_tournament_winner([rps_tournament_winner(game[0]), rps_tournament_winner(game[1])])
 	else
 		return rps_game_winner(game)
