@@ -80,3 +80,65 @@ j1 = JellyBean.new("black licorice", 201, "black licorice")
 puts "Calories in a " + j1.name + " JellyBean: " + j1.calories.to_s
 puts j1.healthy?
 puts j1.delicious?
+
+puts "\n"
+puts "\n"
+
+class Class
+	def attr_accessor_with_history(attr_name)
+		attr_name = attr_name.to_s
+		attr_reader attr_name
+		attr_reader attr_name+"_history"
+		class_eval %Q{
+			def #{attr_name}_history
+				@#{attr_name}_history || [nil]
+			end
+			def #{attr_name}=(new_name)
+				@#{attr_name}_history ||= [nil]
+				@#{attr_name}_history << @#{attr_name} = new_name
+			end
+		}
+	end
+end
+
+class Foo
+	attr_accessor_with_history :bar
+end
+
+f1 = Foo.new
+f1.bar = 2
+f1.bar = "Foo-Bar"
+f1.bar = 35
+p f1.bar_history
+puts "\n"
+puts "\n"
+
+class Numeric
+	@@currencies = {'yen' => 0.013, 'euro' => 1.292, 'rupee' => 0.019}
+	def method_missing(method_id)
+		singular_currency = method_id.to_s.gsub(/s$/, '')
+		if @@currencies.has_key?(singular_currency)
+			self * @@currencies[singular_currency]
+		else
+			super
+		end
+	end
+end
+
+class String
+	def palindrome?
+		#  Make string lowercase, take out whitespace and punctuation 
+		#  then compare to the reverse
+		fixed = self.downcase.scan(/\w/)
+		fixed == fixed.reverse
+	end
+end
+
+puts "foo".palindrome?
+
+module Enumerable
+	def palindrome?
+		p self.to_a == self.to_a.reverse
+	end
+end
+[1,2,3,2,1].palindrome?
