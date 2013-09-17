@@ -142,3 +142,24 @@ module Enumerable
 	end
 end
 [1,2,3,2,1].palindrome?
+
+class CartesianProduct
+	include Enumerable
+	
+	def initialize(x, y)
+		@x = x
+		@y = y		
+	end
+
+	def each
+		return to_enum unless block_given?
+		@x.each do |xi|
+			@y.each {|yi| yield [xi, yi]}
+		end		
+	end
+end
+
+c = CartesianProduct.new([:a, :b], [4, 5, 6])
+c.each { |elt| puts elt.inspect }
+c1 = CartesianProduct.new([:a,:b], [])
+c1.each { |elt| puts elt.inspect }
