@@ -114,7 +114,7 @@ puts "\n"
 puts "\n"
 
 class Numeric
-	@@currencies = {'yen' => 0.013, 'euro' => 1.292, 'rupee' => 0.019}
+	@@currencies = {'dollar' => 1, 'yen' => 0.013, 'euro' => 1.292, 'rupee' => 0.019}
 	def method_missing(method_id)
 		singular_currency = method_id.to_s.gsub(/s$/, '')
 		if @@currencies.has_key?(singular_currency)
@@ -123,7 +123,17 @@ class Numeric
 			super
 		end
 	end
+
+	def in(currency)
+		singular_currency = currency.to_s.gsub(/s$/, '')
+		self / @@currencies[singular_currency]
+	end
 end
+
+puts "\n"
+p 1.dollar.in(:euro)
+p 1.euro.in(:dollar)
+p 10.euros.in(:rupees)
 
 class String
 	def palindrome?
